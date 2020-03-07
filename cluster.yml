@@ -1,0 +1,34 @@
+cluster_name: vagrant_cluster
+ssh_key_path: .vagrant/machines/ranchouille/virtualbox/private_key
+
+nodes:
+    - address: 192.168.1.100
+      user: vagrant
+      role:
+        - controlplane
+        - etcd
+      ssh_key_path: .vagrant/machines/ranchouille-control/virtualbox/private_key
+      port: 22
+
+    - address: 192.168.1.101
+      user: vagrant
+      role:
+        - worker
+      ssh_key_path: .vagrant/machines/ranchouille-worker1/virtualbox/private_key
+      port: 22
+
+# system_images:
+#     kubernetes: rancher/hyperkube:v1.10.3-rancher2
+#     etcd: rancher/coreos-etcd:v3.1.12
+#     alpine: rancher/rke-tools:v0.1.9
+#     nginx_proxy: rancher/rke-tools:v0.1.9
+#     cert_downloader: rancher/rke-tools:v0.1.9
+#     kubernetes_services_sidecar: rancher/rke-tools:v0.1.9
+#     kubedns: rancher/k8s-dns-kube-dns-amd64:1.14.8
+#     dnsmasq: rancher/k8s-dns-dnsmasq-nanny-amd64:1.14.8
+#     kubedns_sidecar: rancher/k8s-dns-sidecar-amd64:1.14.8
+#     kubedns_autoscaler: rancher/cluster-proportional-autoscaler-amd64:1.0.0
+#     pod_infra_container: rancher/pause-amd64:3.1
+
+services:
+    etcd:

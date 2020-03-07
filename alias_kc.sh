@@ -1,0 +1,1 @@
+alias kc='kubectl --kubeconfig kube_config_cluster.yml'
