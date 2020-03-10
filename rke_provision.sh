@@ -1,5 +1,5 @@
 
-# ssh -i .vagrant/machines/ranchouille/virtualbox/private_key vagrant@192.168.1.100
+# ssh -i .vagrant/machines/rancher-lab/virtualbox/private_key vagrant@192.168.99.99
 
 ## Source https://rancher.com/docs/rancher/v2.x/en/installation/k8s-install/kubernetes-rke/
 
