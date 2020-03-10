@@ -3,14 +3,14 @@
 
 ## Source https://rancher.com/docs/rancher/v2.x/en/installation/k8s-install/kubernetes-rke/
 
-sleep 30
-
 rke up # use cluster.yml by default
 
 # Install cert manager
 
 alias kc='kubectl --kubeconfig kube_config_cluster.yml'
 alias helm='helm --kubeconfig kube_config_cluster.yml'
+
+sleep 10
 
 ## Install the CustomResourceDefinition resources separately
 kc apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.12/deploy/manifests/00-crds.yaml

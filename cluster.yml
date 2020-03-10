@@ -2,19 +2,13 @@ cluster_name: vagrant_cluster
 ssh_key_path: .vagrant/machines/ranchouille/virtualbox/private_key
 
 nodes:
-    - address: 192.168.1.100
+    - address: 192.168.1.98
       user: vagrant
       role:
         - controlplane
         - etcd
-      ssh_key_path: .vagrant/machines/ranchouille-control/virtualbox/private_key
-      port: 22
-
-    - address: 192.168.1.101
-      user: vagrant
-      role:
         - worker
-      ssh_key_path: .vagrant/machines/ranchouille-worker1/virtualbox/private_key
+      ssh_key_path: .vagrant/machines/ranchouille-aio/virtualbox/private_key
       port: 22
 
 # system_images:
