@@ -1,43 +1,58 @@
-
-# ssh -i .vagrant/machines/rancher-lab/virtualbox/private_key vagrant@192.168.99.99
+vagrant up
 
 ## Source https://rancher.com/docs/rancher/v2.x/en/installation/k8s-install/kubernetes-rke/
 
-rke up # use cluster.yml by default
+# use cluster.yml by default
+# rke up
 
 # Install cert manager
-
-alias kc='kubectl --kubeconfig kube_config_cluster.yml'
-alias helm='helm --kubeconfig kube_config_cluster.yml'
+export KUBECONFIG=kube_config_cluster.yml
 
 sleep 10
 
-## Install the CustomResourceDefinition resources separately
-kc apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.12/deploy/manifests/00-crds.yaml
+echo "Install the CustomResourceDefinition resources separately"
+kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.12/deploy/manifests/00-crds.yaml
 
-## Create the namespace for cert-manager
-kc create namespace cert-manager
+echo "Create the namespace for cert-manager"
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+EOF
 
-## Add the Jetstack Helm repository
+echo "Add the Jetstack Helm repository"
 helm repo add jetstack https://charts.jetstack.io
 
-## Update your local Helm chart repository cache
+echo "Update your local Helm chart repository cache"
 helm repo update
 
-## Install the cert-manager Helm chart
+echo "Install the cert-manager Helm chart"
 helm install \
   cert-manager jetstack/cert-manager \
-  --namesace cert-manager \
+  --namespace cert-manager \
   --version v0.12.0
 
-sleep 60
+echo "Waiting complete cert-manager deployment"
+kubectl wait --for=condition=available deployment/cert-manager deployment/cert-manager-cainjector deployment/cert-manager-webhook -n cert-manager --timeout=60s
 
-# Install Rancher
+echo "Install Rancher"
 
 helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
-kc create namespace cattle-system
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cattle-system
+EOF
+
 helm install rancher rancher-latest/rancher \
   --namespace cattle-system \
-  --set hostname=rancher.my.org
+  --set hostname=rancher-lab.test
 
-kc -n cattle-system rollout status deploy/rancher
+
+printf 'You should do (as super-user):\n echo "192.168.99.99 rancher-lab.test" >> /etc/hosts\n'
+
+kubectl -n cattle-system rollout status deploy/rancher
+
