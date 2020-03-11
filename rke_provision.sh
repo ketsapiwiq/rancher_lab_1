@@ -3,7 +3,7 @@ vagrant up
 ## Source https://rancher.com/docs/rancher/v2.x/en/installation/k8s-install/kubernetes-rke/
 
 # use cluster.yml by default
-# rke up
+rke up
 
 # Install cert manager
 export KUBECONFIG=kube_config_cluster.yml
@@ -56,3 +56,4 @@ printf 'You should do (as super-user):\n echo "192.168.99.99 rancher-lab.test" >
 
 kubectl -n cattle-system rollout status deploy/rancher
 
+echo 'You can now go to https://rancher-lab.test and set an admin password!'

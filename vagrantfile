@@ -5,9 +5,14 @@ RANCHER_NAME = "rancher-lab"
 
 BOX_IMAGE = "ubuntu/bionic64"
 
+unless Vagrant.has_plugin? "vagrant-disksize"
+  system "vagrant plugin install vagrant-disksize"
+end
+
 Vagrant.configure("2") do |config|
   config.vm.box = BOX_IMAGE
 
+  config.disksize.size = "50GB"
 
   config.vm.define "rancher-lab-aio" do |node|
     node.vm.hostname = "rancher-lab-aio"
@@ -33,3 +38,6 @@ Vagrant.configure("2") do |config|
   end
 
 end
+
+# TODO: Add nfs to handle persistent volumes
+# https://www.vagrantup.com/docs/synced-folders/nfs.html
